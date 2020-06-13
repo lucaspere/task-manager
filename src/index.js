@@ -51,6 +51,29 @@ app.get('/users/:id', async (req, res) => {
    // })
 })
 
+app.patch('/users/:id', async (req, res) => {
+
+   const updates = Object.keys(req.body);
+   const propertyAllowes = ['name', 'email', 'password', "age"];
+
+   const isAllowed = updates.every((item) => propertyAllowes.includes(item));
+   if(!isAllowed) {
+      return res.status(400).send("Propriedade não permitida!");
+   }
+
+   try {
+      const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true});
+
+      if(!user) {
+         return res.status(404).send()
+      }
+
+      res.send(user);
+   } catch(err) {
+      res.status(400).send(err);
+   }
+})
+
 app.post('/users', async (req, res) => {
    const user = new User(req.body);
 
@@ -123,6 +146,28 @@ app.get('/tasks', async (req, res) => {
    // })
 })
 
+app.patch('/tasks/:id', async (req, res) => {
+   const updates = Object.keys(req.body);
+   const propertyAllowes = ['description', 'completed'];
+
+   const isAllowed = updates.every((item) => propertyAllowes.includes(item));
+   if(!isAllowed) {
+      return res.status(400).send("Propriedades não permitidas!");
+   }
+
+   try {
+      const newTask = await Task.findByIdAndUpdate(req.params.id, req.body);
+      
+      if(!newTask) {
+         return res.status(404).send("Tarefa não atualizada!");
+      }
+      
+      res.send(newTask);
+   } catch(err) {
+      res.status(500).send(err)
+   }
+
+})
 app.post('/tasks', async (req, res) => {
    const task = new Task(req.body);
 
