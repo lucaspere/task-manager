@@ -9,6 +9,14 @@ const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
+app.get('/users', (req, res) => {
+
+   User.find({}).then((result) => {
+      res.status(200).send(result)
+   }).catch((err) => {
+      res.status(404).send(err)
+   })
+})
 app.post('/users', (req, res) => {
    const user = new User(req.body);
 
