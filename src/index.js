@@ -10,37 +10,63 @@ const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
-app.get('/users', (req, res) => {
+app.get('/users', async (req, res) => {
 
-   User.find({}).then((result) => {
-      res.status(200).send(result)
-   }).catch((err) => {
-      res.status(500).send(err)
-   })
-})
+   try {
+      const user = await User.find({});
 
-app.get('/users/:id', (req, res) => {
-   const  _id = req.params.id;
-console.log(req.params)
-   User.findById(_id).then((result) => {
-      if(!result) {
-         return res.status(404).send("Usuário não encontrado");
+      if(!user) {
+         return res.status(404).send("Não há Usuários registrados")
       }
 
-      res.status(200).send(result)
-   }).catch((err) => {
+      res.status(200).send(user);
+   } catch(err) {
       res.status(500).send(err)
-   })
+   }
 })
 
-app.post('/users', (req, res) => {
+app.get('/users/:id', async (req, res) => {
+   const  _id = req.params.id;
+
+   try {
+      const user = await User.findById(_id);
+
+      if(!user) {
+         return res.status(404).send("Usuário não encontrado!")
+      }
+
+      res.status(200).send(user);
+   } catch(err) {
+      res.status(500).send(err)
+   }
+
+   // User.findById(_id).then((result) => {
+   //    if(!result) {
+   //       return res.status(404).send("Usuário não encontrado");
+   //    }
+
+   //    res.status(200).send(result)
+   // }).catch((err) => {
+   //    res.status(500).send(err)
+   // })
+})
+
+app.post('/users', async (req, res) => {
    const user = new User(req.body);
 
-   user.save().then((result) => {
-      res.status(201).send(result);
-   }).catch((err) => {
+   try {
+
+      await user.save();
+
+      res.status(201).send(user);
+   } catch(err) {
       res.status(400).send(err)
-   })
+   }
+   // user.save().then((result) => {
+   //    res.status(201).send(result);
+   // }).catch((err) => {
+   //    res.status(400).send(err)
+   // })
 })
 
 app.get('/tasks/:id', (req, res) => {
