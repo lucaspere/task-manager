@@ -20,6 +20,22 @@ app.post('/users', (req, res) => {
    })
 })
 
+app.get('/tasks/:id', (req, res) => {
+
+   const _id = req.params.id;
+
+   User.findById(_id).then((task) => {
+      
+      if(!task) {
+         return res.status(404).send("Tarefa não encontrada!");
+      }
+
+      res.status(200).send(task);
+   }).catch((error) => {
+      res.status(500).send(error)
+   })
+})
+
 app.get('/tasks', (req, res) => {
 
    User.find({}).then((result) => {
@@ -33,6 +49,7 @@ app.get('/tasks', (req, res) => {
       res.status(500).send(error)
    })
 })
+
 app.post('/tasks', (req, res) => {
    const task = new Task(req.body);
 
