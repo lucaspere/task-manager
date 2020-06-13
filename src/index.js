@@ -10,6 +10,20 @@ const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
+app.delete('/users/:id', async (req, res) => {
+   try {
+
+      const userDeleted = await User.findByIdAndDelete(req.params.id);
+
+      if(!userDeleted) {
+         return res.status(404).send("Usuário não encontrado");
+      }
+
+      res.send(userDeleted);
+   } catch(err) {
+      res.status(500).send(err)
+   }
+})
 app.get('/users', async (req, res) => {
 
    try {
@@ -92,6 +106,20 @@ app.post('/users', async (req, res) => {
    // })
 })
 
+app.delete('/tasks/:id', async (req, res) => {
+   try {
+
+      const taskDeleted = await Task.findByIdAndDelete(req.params.id);
+
+      if(!taskDeleted) {
+         return res.status(404).send("Tarefa não encontrado");
+      }
+
+      res.send(taskDeleted);
+   } catch(err) {
+      res.status(500).send(err)
+   }
+})
 app.get('/tasks/:id', async (req, res) => {
 
    const _id = req.params.id;
