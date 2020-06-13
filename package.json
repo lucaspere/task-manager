@@ -1,0 +1,12 @@
+{
+  "name": "tasks-manager",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/lucaspere/task-manager.git",
+  "author": "lucaspere <lucasrupestre@hotmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "mongodb": "^3.5.8",
+    "mongoose": "^5.3.16"
+  }
+}
