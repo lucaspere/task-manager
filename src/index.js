@@ -20,6 +20,19 @@ app.post('/users', (req, res) => {
    })
 })
 
+app.get('/tasks', (req, res) => {
+
+   User.find({}).then((result) => {
+      
+      if(!result) {
+         return res.status(404).send("Nenhuma tarefa encontrada!");
+      }
+
+      res.status(200).send(result);
+   }).catch((error) => {
+      res.status(500).send(error)
+   })
+})
 app.post('/tasks', (req, res) => {
    const task = new Task(req.body);
 
